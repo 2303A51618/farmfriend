@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/farmfriend/static/css/main.d03aa152.css",
+    "main.js": "/farmfriend/static/js/main.42152cd8.js",
+    "index.html": "/farmfriend/index.html",
+    "main.d03aa152.css.map": "/farmfriend/static/css/main.d03aa152.css.map",
+    "main.42152cd8.js.map": "/farmfriend/static/js/main.42152cd8.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.d03aa152.css",
+    "static/js/main.42152cd8.js"
+  ]
+}
