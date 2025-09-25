@@ -1,12 +1,10 @@
-// apps/frontend/src/pages/Auth/BuyerLogin/BuyerLogin.jsx
-
+// frontend/src/pages/Agent/Auth/AgentLogin.jsx
 import React, { useState } from "react";
-//import axios from "axios";
+import "../Auth.css";  // ✅ common css
 import API from "../../../api"; // ✅ axios instance with baseURL
 import { useNavigate } from "react-router-dom";
-import "../Auth.css"; // ✅ common css
 
-function BuyerLogin() {
+function AgentLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -14,31 +12,27 @@ function BuyerLogin() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await API.post("/buyers/login", {
-        email,
-        password,
-      });
+      const { data } = await API.post("/agents/login", { email, password });
 
-      // ✅ Assuming backend returns { token, user }
-      const { token, user } = res.data;
+      // ✅ store token + user in localStorage
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("role", "agent");
 
-      // Save in localStorage
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
-
+      // ✅ success alert
       alert("Login successful ✅");
 
-      // ✅ Redirect buyer to Buyer Dashboard
-      navigate("/buyer/dashboard");
+      // ✅ navigate immediately to dashboard
+      navigate("/agent/dashboard", { replace: true });
+
     } catch (err) {
-      console.error(err);
-      alert("Login failed ❌");
+      alert(err.response?.data?.message || "Login failed ❌");
     }
   };
 
   return (
     <div className="auth-container">
-      <h2>Buyer Login</h2>
+      <h2>Agent Login</h2>
       <form onSubmit={handleSubmit}>
         <input
           type="email"
@@ -60,4 +54,4 @@ function BuyerLogin() {
   );
 }
 
-export default BuyerLogin;
+export default AgentLogin;

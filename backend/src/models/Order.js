@@ -12,6 +12,8 @@ const orderSchema = new mongoose.Schema(
       enum: ["Pending", "Completed", "Cancelled"],
       default: "Pending",
     },
+    agent: { type: mongoose.Schema.Types.ObjectId, ref: "Agent" }, // agent who handled this order
+    agentCommission: { type: Number, default: 0 },
   },
   { timestamps: true }
 );

@@ -1,0 +1,17 @@
+.products-container h2 {
+  margin-bottom: 20px;
+}
+
+.product-list {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.product-card {
+  background: #e5f3ff;
+  padding: 15px;
+  border-radius: 10px;
+  flex: 1 1 200px;
+  text-align: center;
+}

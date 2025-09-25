@@ -1,0 +1,44 @@
+/* apps/frontend/src/components/AgentSidebar.css */
+.agent-sidebar {
+  width: 200px;
+  min-height: 100vh;
+  background: #1a202c;
+  color: #fff;
+  padding: 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.sidebar-title {
+  font-size: 20px;
+  margin-bottom: 30px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.agent-sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.agent-sidebar ul li {
+  margin: 15px 0;
+}
+
+.agent-sidebar ul li a {
+  color: #fff;
+  text-decoration: none;
+  padding: 10px;
+  display: block;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.agent-sidebar ul li a:hover {
+  background: #2d3748;
+}
+
+.active-link {
+  background: #4a90e2;
+}

@@ -11,20 +11,23 @@ function CropDetails() {
   const [crop, setCrop] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // ✅ Safe API Base URL (remove `/api` so we can attach `/uploads/...`)
+  //const apiBaseUrl =
+   // process.env.REACT_APP_API_URL?.replace("/api", "") || "";
+
   useEffect(() => {
     const fetchCrop = async () => {
       try {
         // 🔹 Try public crop API first
-  let res = await API.get(`/crops/${id}`);
+        let res = await API.get(`/crops/${id}`);
         setCrop(res.data);
       } catch (err) {
         try {
           // 🔹 If not found, fallback to farmer’s product API
           const token = localStorage.getItem("token");
-          let res = await API.get(
-            `/farmers/products/${id}`,
-            { headers: { Authorization: `Bearer ${token}` } }
-          );
+          let res = await API.get(`/farmers/products/${id}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
           setCrop(res.data);
         } catch (error2) {
           console.error("Error fetching crop:", error2);
@@ -53,7 +56,7 @@ function CropDetails() {
         <p>{crop.description || "No description provided"}</p>
 
         {/* Image Gallery */}
-        <div className="crop-image-gallery">
+        {/* <div className="crop-image-gallery">
           {crop.images && crop.images.length > 0 ? (
             crop.images.map((img, idx) => (
               <img
@@ -61,7 +64,10 @@ function CropDetails() {
                 src={
                   img.startsWith("http")
                     ? img
-                    : `http://localhost:5000${img}`
+                    : `${apiBaseUrl}/uploads/${img.replace(
+                        /^\/?uploads\//,
+                        ""
+                      )}`
                 }
                 alt={`crop-${idx}`}
                 className="crop-img"
@@ -70,7 +76,7 @@ function CropDetails() {
           ) : (
             <img src="/default-crop.jpg" alt="default" className="crop-img" />
           )}
-        </div>
+        </div> */}
 
         {/* Crop Info */}
         <div className="crop-info">

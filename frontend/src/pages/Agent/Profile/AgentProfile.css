@@ -1,0 +1,10 @@
+.profile-container h2 {
+  margin-bottom: 15px;
+}
+
+.profile-card {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 12px;
+  width: 300px;
+}

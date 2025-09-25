@@ -33,7 +33,12 @@ app.use(morgan("dev"));
 // Static folder for uploaded images
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-app.use("/uploads", express.static(path.join(__dirname, "src", "uploads")));
+
+// ✅ Serve static uploads folder
+app.use(
+  "/uploads",
+  express.static(path.resolve(__dirname, "src", "uploads"))
+);
 
 // Health check route
 app.get("/", (req, res) => {

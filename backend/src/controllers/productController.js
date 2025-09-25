@@ -4,7 +4,8 @@ import Product from "../models/Product.js";
 // Get all products
 export const getProducts = async (req, res) => {
   try {
-    const products = await Product.find().populate("farmer", "name email");
+    // const products = await Product.find().populate("farmer", "name email");
+    const products = await Product.find({ approved: true }).populate("farmer", "name email");
     res.json(products);
   } catch (error) {
     console.error("Error fetching products:", error);
@@ -19,11 +20,14 @@ export const getProductById = async (req, res) => {
       "farmer",
       "name email"
     );
+    if (req.files && req.files.length > 0) {
+  product.images = req.files.map(file => `/uploads/${file.filename}`);
+}
 
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
-
+ 
     res.json(product);
   } catch (error) {
     console.error("Error fetching product:", error);

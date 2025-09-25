@@ -65,11 +65,9 @@ function FarmerMarketplace() {
     try {
       const token = localStorage.getItem("token");
       if (editProduct) {
-        await API.put(
-          `/farmers/products/${editProduct._id}`,
-          data,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
+        await API.put(`/farmers/products/${editProduct._id}`, data, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
         alert("✅ Product updated!");
       } else {
         await API.post("/farmers/products", data, {
@@ -99,12 +97,12 @@ function FarmerMarketplace() {
   const handleEdit = (product) => {
     setEditProduct(product);
     setFormData({
-      name: product.name,
-      description: product.description,
-      price: product.price,
-      quantity: product.quantity,
-      quality: product.quality,
-      organic: product.organic,
+      name: product.name || "",
+      description: product.description || "",
+      price: product.price || "",
+      quantity: product.quantity || "",
+      quality: product.quality || "A",
+      organic: product.organic || false,
       images: []
     });
     setShowForm(true);
@@ -125,6 +123,11 @@ function FarmerMarketplace() {
     }
   };
 
+  // ✅ Safe API Base URL
+  // eslint-disable-next-line no-unused-vars
+  const apiBaseUrl =
+    process.env.REACT_APP_API_URL?.replace("/api", "") || "";
+
   return (
     <div className="marketplace-container">
       <div className="header">
@@ -143,18 +146,30 @@ function FarmerMarketplace() {
               className="product-card clickable"
               onClick={() => navigate(`/farmer/marketplace/${p._id}`)}
             >
-              <img
-                src={p.images?.[0] ? `http://localhost:5000${p.images[0]}` : "/default-crop.jpg"}
-                alt={p.name}
+              {/* <img
+                src={
+                  p?.images?.[0]
+                    ? `${apiBaseUrl}/uploads/${p.images[0].replace(/^\/?uploads\//, "")}`
+                    : "/default-crop.jpg"
+                }
+                alt={p?.name || "Unnamed Crop"}
                 className="product-img"
-              />
+              /> */}
+
+
               <div className="product-details">
-                <h3>{p.name}</h3>
-                <p>{p.description}</p>
-                <p><strong>Price:</strong> ₹{p.price}</p>
-                <p><strong>Qty:</strong> {p.quantity} kg</p>
-                <p><strong>Quality:</strong> {p.quality}</p>
-                <p>{p.organic ? "🌱 Organic" : "❌ Non-Organic"}</p>
+                <h3>{p?.name || "Unnamed Crop"}</h3>
+               {/*  <p>{p?.description || "No description available"}</p> */}
+                <p>
+                  <strong>Price:</strong> ₹{p?.price || 0}
+                </p>
+                <p>
+                  <strong>Qty:</strong> {p?.quantity || 0} kg
+                </p>
+                {/*<p>
+                  <strong>Quality:</strong> {p?.quality || "N/A"}
+                </p>
+               <p>{p?.organic ? "🌱 Organic" : "❌ Non-Organic"}</p> */}
 
                 {/* Edit/Delete */}
                 <div className="actions">
@@ -189,17 +204,52 @@ function FarmerMarketplace() {
           <div className="modal-content">
             <h3>{editProduct ? "✏️ Edit Product" : "➕ Add Product"}</h3>
             <form onSubmit={handleSubmit} className="product-form">
-              <input type="text" name="name" placeholder="Crop Name" value={formData.name} onChange={handleChange} required />
-              <textarea name="description" placeholder="Description" value={formData.description} onChange={handleChange} />
-              <input type="number" name="price" placeholder="Price" value={formData.price} onChange={handleChange} required />
-              <input type="number" name="quantity" placeholder="Quantity (kg)" value={formData.quantity} onChange={handleChange} required />
-              <select name="quality" value={formData.quality} onChange={handleChange}>
+              <input
+                type="text"
+                name="name"
+                placeholder="Crop Name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+              />
+              <textarea
+                name="description"
+                placeholder="Description"
+                value={formData.description}
+                onChange={handleChange}
+              />
+              <input
+                type="number"
+                name="price"
+                placeholder="Price"
+                value={formData.price}
+                onChange={handleChange}
+                required
+              />
+              <input
+                type="number"
+                name="quantity"
+                placeholder="Quantity (kg)"
+                value={formData.quantity}
+                onChange={handleChange}
+                required
+              />
+              <select
+                name="quality"
+                value={formData.quality}
+                onChange={handleChange}
+              >
                 <option value="A">A (Excellent)</option>
                 <option value="B">B (Good)</option>
                 <option value="C">C (Average)</option>
               </select>
               <label>
-                <input type="checkbox" name="organic" checked={formData.organic} onChange={handleChange} />
+                <input
+                  type="checkbox"
+                  name="organic"
+                  checked={formData.organic}
+                  onChange={handleChange}
+                />
                 Organic
               </label>
               <input type="file" name="images" multiple onChange={handleChange} />
@@ -207,13 +257,27 @@ function FarmerMarketplace() {
               <div className="image-preview">
                 {formData.images &&
                   Array.from(formData.images).map((file, index) => (
-                    <img key={index} src={URL.createObjectURL(file)} alt="preview" className="preview-thumb" />
+                    <img
+                      key={index}
+                      src={URL.createObjectURL(file)}
+                      alt="preview"
+                      className="preview-thumb"
+                    />
                   ))}
               </div>
 
               <div className="form-actions">
-                <button type="submit">{editProduct ? "Update" : "Add"}</button>
-                <button type="button" className="cancel-btn" onClick={() => { setShowForm(false); setEditProduct(null); }}>
+                <button type="submit">
+                  {editProduct ? "Update" : "Add"}
+                </button>
+                <button
+                  type="button"
+                  className="cancel-btn"
+                  onClick={() => {
+                    setShowForm(false);
+                    setEditProduct(null);
+                  }}
+                >
                   Cancel
                 </button>
               </div>

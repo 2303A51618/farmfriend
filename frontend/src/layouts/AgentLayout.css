@@ -1,0 +1,12 @@
+/* apps/frontend/src/layouts/AgentLayout.css */
+.agent-layout {
+  display: flex;
+}
+
+.agent-content {
+  margin-left: 200px; /* Leave space for sidebar */
+  padding: 20px;
+  width: 100%;
+  background: #f9f9f9;
+  min-height: 100vh;
+}

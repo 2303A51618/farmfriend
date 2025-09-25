@@ -42,6 +42,9 @@ import Profile from "./pages/Buyer/Profile/Profile";
 
 // Agent Section
 import AgentDashboard from "./pages/Agent/Dashboard/AgentDashboard";
+import AgentFarmers from "./pages/Agent/Farmers/AgentFarmers";
+import AgentOrders from "./pages/Agent/Orders/AgentOrders";
+import AgentPayments from "./pages/Agent/Payments/AgentPayments";
 
 // Admin Section
 import AdminDashboard from "./pages/Admin/Dashboard/AdminDashboard";
@@ -191,7 +194,7 @@ function App() {
           }
         />
 
-        {/* Agent */}
+        {/* Agent Protected Routes */}
         <Route
           path="/agent/dashboard"
           element={
@@ -200,8 +203,32 @@ function App() {
             </RequireAuth>
           }
         />
+        <Route
+          path="/agent/farmers"
+          element={
+            <RequireAuth allowedRoles={["agent"]} redirectTo="/agent/login">
+              <AgentFarmers />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/agent/orders"
+          element={
+            <RequireAuth allowedRoles={["agent"]} redirectTo="/agent/login">
+              <AgentOrders />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/agent/payments"
+          element={
+            <RequireAuth allowedRoles={["agent"]} redirectTo="/agent/login">
+              <AgentPayments />
+            </RequireAuth>
+          }
+        />
 
-        {/* Admin */}
+        {/* Admin Protected Routes */}
         <Route
           element={
             <RequireAuth allowedRoles={["admin"]} redirectTo="/admin/login" />

@@ -1,0 +1,18 @@
+.farmers-container h2 {
+  margin-bottom: 20px;
+}
+
+.farmers-container table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.farmers-container th, td {
+  border: 1px solid #ddd;
+  padding: 10px;
+}
+
+.farmers-container th {
+  background: #2b3a55;
+  color: #fff;
+}

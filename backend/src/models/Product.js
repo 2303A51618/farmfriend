@@ -10,6 +10,7 @@ const productSchema = new mongoose.Schema(
     quantity: { type: Number, required: true },
     quality: { type: String },
     isOrganic: { type: Boolean, default: false },
+    approved: { type: Boolean, default: false }, // added for agent approval workflow
     images: [{ type: String }],
   },
   { timestamps: true }
