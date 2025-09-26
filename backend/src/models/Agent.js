@@ -1,3 +1,4 @@
+// backend/src/models/Agent.js
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
@@ -7,6 +8,8 @@ const agentSchema = new mongoose.Schema({
   password: { type: String, required: true },
   phone: { type: String, required: true },
   region: { type: String, required: true },
+  role: { type: String, default: "agent" },   // ✅ Needed for authMiddleware
+  commissionEarned: { type: Number, default: 0 }, // ✅ Track earnings
   createdAt: { type: Date, default: Date.now },
 });
 
@@ -18,7 +21,7 @@ agentSchema.pre("save", async function (next) {
   next();
 });
 
-// ✅ Password compare method
+// ✅ Password compare
 agentSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };

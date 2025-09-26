@@ -1,21 +1,62 @@
-import React from "react";
+// apps/frontend/src/pages/Agent/Profile/AgentProfile.jsx
+import React, { useEffect, useState } from "react";
+import API from "../../../api";
 import { motion } from "framer-motion";
-import { slideInLeft } from "../animations";
-import "./AgentProfile.css";
+import { slideInLeft } from "../../Agent/animation";
+import "../../../pages/Agent/Agent.css";
 
-const AgentProfile = () => {
-  const profile = { name: "Agent Vasu", email: "agent@farmfriend.com", phone: "9876543210" };
+export default function AgentProfile() {
+  const [profile, setProfile] = useState(null);
+  const [form, setForm] = useState({ fullName: "", phone: "", region: "" });
+  const [loading, setLoading] = useState(true);
+
+  const fetchProfile = async () => {
+    setLoading(true);
+    try {
+      const { data } = await API.get("/agents/profile");
+      setProfile(data.user);
+      setForm({ fullName: data.user.fullName || "", phone: data.user.phone || "", region: data.user.region || "" });
+    } catch (err) {
+      console.error("Error loading profile:", err);
+      alert("Failed to load profile");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProfile();
+  }, []);
+
+  const handleSave = async (e) => {
+    e.preventDefault();
+    try {
+      const { data } = await API.put("/agents/profile", form);
+      alert("Profile updated");
+      setProfile(data.user);
+    } catch (err) {
+      console.error("Error updating profile:", err);
+      alert("Failed to update profile");
+    }
+  };
+
+  if (loading) return <div className="panel">Loading profile...</div>;
+  if (!profile) return <div className="panel">Profile not found</div>;
 
   return (
-    <motion.div className="profile-container" initial="hidden" animate="visible" variants={slideInLeft}>
-      <h2>Profile</h2>
-      <div className="profile-card">
-        <p><strong>Name:</strong> {profile.name}</p>
-        <p><strong>Email:</strong> {profile.email}</p>
-        <p><strong>Phone:</strong> {profile.phone}</p>
+    <motion.div initial="hidden" animate="visible" variants={slideInLeft}>
+      <div className="panel">
+        <h2>My Profile</h2>
+        <form onSubmit={handleSave} style={{ display: "grid", gap: 8 }}>
+          <input className="input" value={form.fullName} onChange={(e) => setForm({ ...form, fullName: e.target.value })} placeholder="Full name" required />
+          <input className="input" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="Phone" />
+          <input className="input" value={form.region} onChange={(e) => setForm({ ...form, region: e.target.value })} placeholder="Region" />
+          <div style={{ display: "flex", gap: 8 }}>
+            <button className="btn" type="submit">Save</button>
+            <button type="button" className="btn secondary" onClick={() => fetchProfile()}>Reload</button>
+          </div>
+        </form>
       </div>
     </motion.div>
   );
-};
-
-export default AgentProfile;
+}

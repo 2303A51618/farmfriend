@@ -196,6 +196,27 @@ export const getOrdersForAgent = async (req, res) => {
   }
 };
 
+export const approveOrder = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { approve } = req.body;
+    const order = await Order.findById(id).populate("farmer");
+    if (!order) return res.status(404).json({ message: "Order not found" });
+
+    if (order.farmer.agent?.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: "Not authorized" });
+    }
+
+    order.approved = approve;
+    await order.save();
+    res.json({ message: approve ? "Order approved" : "Order rejected", order });
+  } catch (err) {
+    console.error("approveOrder:", err);
+    res.status(500).json({ message: "Error approving order" });
+  }
+};
+
+
 // Update order status (and compute commission on Delivered)
 export const updateOrderStatus = async (req, res) => {
   try {

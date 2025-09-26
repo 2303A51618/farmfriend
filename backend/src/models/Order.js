@@ -1,22 +1,24 @@
+// backend/src/models/Order.js
 import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema(
   {
     buyer: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    farmer: { type: mongoose.Schema.Types.ObjectId, ref: "Farmer", required: true }, // ✅ Added farmer
     product: { type: mongoose.Schema.Types.ObjectId, ref: "Product", required: true },
     quantity: { type: Number, required: true },
-    price: { type: Number, required: true }, // price per unit at time of order
+    price: { type: Number, required: true }, 
     total: { type: Number, required: true },
     status: {
       type: String,
-      enum: ["Pending", "Completed", "Cancelled"],
+      enum: ["Pending", "Completed", "Cancelled", "Delivered"],
       default: "Pending",
     },
-    agent: { type: mongoose.Schema.Types.ObjectId, ref: "Agent" }, // agent who handled this order
+    approved: { type: Boolean, default: false },
+    agent: { type: mongoose.Schema.Types.ObjectId, ref: "Agent" },
     agentCommission: { type: Number, default: 0 },
   },
   { timestamps: true }
 );
 
-const Order = mongoose.model("Order", orderSchema);
-export default Order;
+export default mongoose.model("Order", orderSchema);

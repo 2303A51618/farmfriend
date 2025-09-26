@@ -1,4 +1,4 @@
-// apps/frontend/src/components/AgentSidebar.jsx
+// frontend/src/components/AgentSidebar.jsx
 import React from "react";
 import { NavLink } from "react-router-dom";
 import "./AgentSidebar.css";
@@ -17,6 +17,11 @@ function AgentSidebar() {
           </NavLink>
         </li>
         <li>
+  <NavLink to="/agent/marketplace" className={({ isActive }) => isActive ? "active-link" : ""}>
+    🛒 Marketplace
+  </NavLink>
+</li>
+        <li>
           <NavLink
             to="/agent/farmers"
             className={({ isActive }) => (isActive ? "active-link" : "")}
@@ -32,9 +37,15 @@ function AgentSidebar() {
             📦 Orders
           </NavLink>
         </li>
+        <li>
+  <NavLink to="/agent/profile" className={({ isActive }) => isActive ? "active-link" : ""}>
+    👤 Profile
+  </NavLink>
+</li>
       </ul>
     </div>
   );
 }
 
 export default AgentSidebar;
+
