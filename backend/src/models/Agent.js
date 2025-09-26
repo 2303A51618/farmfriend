@@ -8,12 +8,12 @@ const agentSchema = new mongoose.Schema({
   password: { type: String, required: true },
   phone: { type: String, required: true },
   region: { type: String, required: true },
-  role: { type: String, default: "agent" },   // ✅ Needed for authMiddleware
-  commissionEarned: { type: Number, default: 0 }, // ✅ Track earnings
+  role: { type: String, default: "agent" },  // ✅ Added role
+  commissionEarned: { type: Number, default: 0 },
   createdAt: { type: Date, default: Date.now },
 });
 
-// ✅ Hash password before save
+// Hash password
 agentSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
   const salt = await bcrypt.genSalt(10);
@@ -21,7 +21,7 @@ agentSchema.pre("save", async function (next) {
   next();
 });
 
-// ✅ Password compare
+// Compare password
 agentSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };

@@ -40,7 +40,10 @@ export const loginAgent = async (req, res) => {
     const match = await bcrypt.compare(password, agent.password);
     if (!match) return res.status(400).json({ message: "Invalid credentials" });
 
-    const token = signToken({ _id: agent._id, role: agent.role, email: agent.email });
+    //const token = signToken({ _id: agent._id, role: agent.role, email: agent.email });
+    //// agentController.js
+  const token = signToken({ _id: agent._id, role: "agent", email: agent.email });
+
     res.json({ message: "Login successful", user: agent, token });
   } catch (err) {
     console.error("loginAgent:", err);
